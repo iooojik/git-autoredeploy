@@ -1,0 +1,130 @@
+linters:
+  enable-all: true
+  disable:
+    - depguard
+    - gci
+    - gofmt
+    - execinquery
+    - gomnd
+    - godox
+    - gofumpt
+    - goimports
+    - varnamelen
+    - nonamedreturns
+    - errname
+    - importas
+    - misspell
+    - govet
+    - tagliatelle
+    - nlreturn
+    - lll
+    - funlen
+    - gocognit
+    - cyclop
+    - gocyclo
+    - ireturn
+    - tagalign
+
+linters-settings:
+  gomoddirectives:
+    replace-local: true
+
+  mnd:
+    ignored-functions:
+      - os.OpenFile
+      - os.WriteFile
+      - os.Chmod
+      - pflag.*
+      - flag.*
+      - strconv.Format
+      - strconv.Parse
+      - strconv.Append
+
+  gosec:
+    config:
+      G306: "0666" # enable to create files with permissions 0666 (before umask) or lesser
+
+  forbidigo:
+    forbid:
+      - (?i)(^|\.)print(f|ln)?$ #forbidden: print, println, fmt.Print, fmt.Println, fmt.Printf
+
+  gomodguard:
+    allowed:
+      modules:
+        [ ]
+      domains:
+        [ ]
+
+    blocked:
+      modules:
+        - github.com/magiconair/properties:
+            recommendations:
+              - github.com/stretchr/testify/assert
+              - github.com/stretchr/testify/require
+            reason: "Please use the one testing framework for the whole repository."
+      versions:
+        [ ]
+
+  errcheck:
+    exclude-functions:
+      - (*github.com/gin-gonic/gin.Context).Error
+      - (*github.com/gin-gonic/gin.Context).AbortWithError
+      - (*io.ReadCloser).Close
+
+  wsl:
+    force-case-trailing-whitespace: 1
+    allow-trailing-comment: true
+    allow-separated-leading-comment: true
+
+  revive:
+    enable-all-rules: true
+    confidence: 0.8
+    rules:
+      - name: function-length
+        severity: warning
+        disabled: false
+        arguments: [ 50, 0 ]
+      - name: function-result-limit
+        severity: warning
+        disabled: false
+        arguments: [ 3 ]
+      - name: cognitive-complexity
+        severity: warning
+        disabled: false
+        arguments: [ 20 ]
+      - name: cyclomatic
+        severity: warning
+        disabled: false
+        arguments: [ 10 ]
+      - name: line-length-limit
+        severity: warning
+        disabled: false
+        arguments: [ 110 ]
+      - name: argument-limit
+        severity: warning
+        disabled: false
+        arguments: [ 6 ]
+      - name: unhandled-error
+        disabled: false
+        arguments:
+          - "bytes\\.Buffer\\.Write.*" # always returns nil error
+          - "strings\\.Builder\\.Write.*" # always returns nil error
+      # disabled rules
+      - name: comment-spacings # many false-positives
+        disabled: true
+      - name: unchecked-type-assertion # use forcetypeassert for that
+        disabled: true
+      - name: max-public-structs # quite annoying rule
+        disabled: true
+      - name: banned-characters
+        disabled: true
+      - name: file-header
+        disabled: true
+      - name: flag-parameter # extremely annoying linter, it is absolutely okay to have boolean args
+        disabled: true
+      - name: struct-tag # false-positive on tags implemented by other linters
+        disabled: true
+      - name: add-constant # don't have exclusions list
+        disabled: true
+      - name: empty-lines # it false-positives on one-liners
+        disabled: true

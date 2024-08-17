@@ -1,0 +1,10 @@
+projects:
+  - name: project1
+    repo: "git@github.com:username/project1.git"
+    directory: "/path/to/project1"
+    command: "bash run.sh"
+  - name: project2
+    repo: "git@github.com:username/project2.git"
+    directory: "/path/to/project2"
+    command: "python main.py"
+check_interval: 60
