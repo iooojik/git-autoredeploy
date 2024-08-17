@@ -2,6 +2,7 @@ package config
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/spf13/viper"
 )
@@ -18,14 +19,19 @@ type Config struct {
 	CheckInterval int       `yaml:"check_interval"`
 }
 
-func LoadConfig() *Config {
+func LoadConfig(path string) *Config {
 	viper.SetConfigName("config")
 	viper.SetConfigType("yaml")
 	viper.AddConfigPath("configs")
 
-	err := viper.ReadInConfig()
+	f, err := os.Open(path)
 	if err != nil {
-		panic(fmt.Errorf("fatal error config file: %s", err))
+		panic(fmt.Errorf("open config file: %w", err))
+	}
+
+	err = viper.ReadConfig(f)
+	if err != nil {
+		panic(fmt.Errorf("read config file %s %w", path, err))
 	}
 
 	cfg := new(Config)

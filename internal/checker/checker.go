@@ -2,6 +2,7 @@ package checker
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"os/exec"
 	"strings"
@@ -16,27 +17,6 @@ type Checker struct {
 
 func New(cfg *config.Config) *Checker {
 	return &Checker{cfg: cfg}
-}
-
-func (c *Checker) checkProject(
-	lastSha string,
-	project config.Project,
-) (string, error) {
-	remoteSha, err := fetchRemoteShaForCurrentBranch(project.Directory)
-	if err != nil {
-		return "", fmt.Errorf("get last commi for %s: %w", project.Name, err)
-	}
-
-	if lastSha != remoteSha {
-		// fmt.Printf("New update detected for %s! Running command...\n", project.Name)
-
-		err = runCommand(project.Directory, project.Command)
-		if err != nil {
-			return "", fmt.Errorf("run command for %s: %w", project.Name, err)
-		}
-	}
-
-	return remoteSha, nil
 }
 
 func (c *Checker) RunMonitoring() error {
@@ -54,19 +34,39 @@ func (c *Checker) RunMonitoring() error {
 	ticker := time.NewTicker(time.Duration(c.cfg.CheckInterval) * time.Second)
 	defer ticker.Stop()
 
-	for {
-		select {
-		case <-ticker.C:
-			for _, project := range c.cfg.Projects {
-				newSha, err := c.checkProject(lastCommitSha[project.Name], project)
-				if err != nil {
-					return err
-				}
+	for t := range ticker.C {
+		log.Printf("check at: %v\n", t.UTC())
 
-				lastCommitSha[project.Name] = newSha
+		for _, project := range c.cfg.Projects {
+			newSha, err := checkProject(lastCommitSha[project.Name], project)
+			if err != nil {
+				return err
 			}
+
+			lastCommitSha[project.Name] = newSha
 		}
 	}
+
+	return nil
+}
+
+func checkProject(
+	lastSha string,
+	project config.Project,
+) (string, error) {
+	remoteSha, err := fetchRemoteShaForCurrentBranch(project.Directory)
+	if err != nil {
+		return "", fmt.Errorf("get last commi for %s: %w", project.Name, err)
+	}
+
+	if lastSha != remoteSha {
+		err = runCommand(project.Directory, project.Command)
+		if err != nil {
+			return "", fmt.Errorf("run command for %s: %w", project.Name, err)
+		}
+	}
+
+	return remoteSha, nil
 }
 
 func fetchLocalCommitSha(

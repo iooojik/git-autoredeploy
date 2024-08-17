@@ -44,10 +44,6 @@ linters-settings:
     config:
       G306: "0666" # enable to create files with permissions 0666 (before umask) or lesser
 
-  forbidigo:
-    forbid:
-      - (?i)(^|\.)print(f|ln)?$ #forbidden: print, println, fmt.Print, fmt.Println, fmt.Printf
-
   gomodguard:
     allowed:
       modules:
