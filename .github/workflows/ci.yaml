@@ -36,10 +36,8 @@ jobs:
 
       - name: Run linter
         run: |
-          go install golang.org/x/lint/golint@latest
-          golint -set_exit_status ./...
-        env:
-          CONFIG_FILE: ./scripts/.golangci.yml
+          go install go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.60.1
+          golangci-lint run -c scripts/.golangci.yml
 
       - name: Compile main.go
         run: go build -o build/main ./cmd/autodeploy/main.go
