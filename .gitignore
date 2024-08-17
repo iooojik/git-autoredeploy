@@ -9,6 +9,7 @@ configs/config.yml
 api.yaml
 # AWS User-specific
 dev
+
 mysql.log
 .idea/**/aws.xml
 # Generated files
