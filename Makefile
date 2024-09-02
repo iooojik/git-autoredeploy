@@ -6,12 +6,13 @@ SERVICE_FILE = ./$(SERVICE_NAME).service
 # Define the build directory and source directory
 SRC_DIR = $(shell pwd)
 BUILD_DIR = $(SRC_DIR)/build
+CONFIG_PATH = $(SRC_DIR)/configs/config.yaml
 
 # Define the Go build command
 GO_BUILD = go build -o $(BUILD_DIR)/$(BINARY_NAME) $(SRC_DIR)/cmd/autodeploy/main.go
 
 # Define the service file content
-SERVICE_CONTENT = "[Unit]\nDescription=Git Monitor Service\nAfter=network.target\n\n[Service]\nExecStart=$(BUILD_DIR)/$(BINARY_NAME)\nRestart=always\nUser=$(USER)\nGroup=$(USER)\nEnvironment=GO_ENV=production\nWorkingDirectory=$(SRC_DIR)\n\n[Install]\nWantedBy=multi-user.target\n"
+SERVICE_CONTENT = "[Unit]\nDescription=Git Monitor Service\nAfter=network.target\n\n[Service]\nExecStart=$(BUILD_DIR)/$(BINARY_NAME) -config $(CONFIG_PATH)\nRestart=always\nUser=$(USER)\nGroup=$(USER)\nEnvironment=GO_ENV=production\nWorkingDirectory=$(SRC_DIR)\n\n[Install]\nWantedBy=multi-user.target\n"
 
 # Default target: build the binary and install the service
 all: build install
