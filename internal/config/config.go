@@ -15,10 +15,14 @@ type Project struct {
 	Command   string `yaml:"command"`
 }
 
+type Check struct {
+	Interval int `yaml:"interval"`
+}
+
 // Config holds the configuration for all projects and the interval for checking updates.
 type Config struct {
-	Projects      []Project `yaml:"projects"`
-	CheckInterval int       `yaml:"check_interval"`
+	Projects []Project `yaml:"projects"`
+	Check    *Check    `yaml:"check"`
 }
 
 // LoadConfig loads the configuration from the specified path using Viper.

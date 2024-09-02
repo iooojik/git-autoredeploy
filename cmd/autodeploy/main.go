@@ -11,7 +11,7 @@ import (
 
 func main() {
 	// Define a command-line flag for the config directory, defaulting to the current directory
-	configDir := flag.String("config", ".", "Directory where the config file is located")
+	configDir := flag.String("config", "configs/config.yaml", "Directory where the config file is located")
 	flag.Parse()
 
 	// Load the configuration from the specified directory

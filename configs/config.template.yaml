@@ -7,4 +7,6 @@ projects:
     repo: "git@github.com:username/project2.git"
     directory: "/path/to/project2"
     command: "python main.py"
-check_interval: 60
+
+check:
+  interval: 60

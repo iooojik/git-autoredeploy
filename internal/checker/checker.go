@@ -37,7 +37,7 @@ func (c *Checker) RunMonitoring() error {
 	}
 
 	// Set up a ticker to trigger checks at regular intervals
-	ticker := time.NewTicker(time.Duration(c.cfg.CheckInterval) * time.Second)
+	ticker := time.NewTicker(time.Duration(c.cfg.Check.Interval) * time.Second)
 	defer ticker.Stop()
 
 	// Monitor the repositories at each tick

@@ -44,7 +44,8 @@ Git Auto Redeploy is a Go application that monitors specified Git repositories f
         repo: "git@github.com:username/project2.git"
         directory: "/path/to/project2"
         command: "python deploy.py"
-    check_interval: 60
+    check:
+      interval: 60
     ```
 
 4. **Run the application:**
