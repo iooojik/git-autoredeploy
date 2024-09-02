@@ -5,11 +5,9 @@
 # User-specific stuff
 .idea
 configs/config.json
-configs/config.yml
-api.yaml
+configs/config.yaml
 # AWS User-specific
 dev
-
 mysql.log
 .idea/**/aws.xml
 # Generated files

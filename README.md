@@ -20,7 +20,7 @@ Git Auto Redeploy is a Go application that monitors specified Git repositories f
 1. **Clone the repository:**
 
     ```bash
-    git clone https://github.com/yourusername/git-autoredeploy.git
+    git clone https://github.com/iooojik/git-autoredeploy
     cd git-autoredeploy
     ```
 
@@ -50,13 +50,13 @@ Git Auto Redeploy is a Go application that monitors specified Git repositories f
 4. **Run the application:**
 
     ```bash
-    ./build/git-autoredeploy -configDir ./configs
+    ./build/git-autoredeploy -config ./configs/
     ```
 
 ## Usage
 
 - **Command-line flags:**
-    - `-configDir`: Specifies the directory where the configuration file is located. Default is the current directory.
+    - `-config`: Specifies the directory where the configuration file is located. Default is the current directory.
 
 - **Daemon Setup:**
 
@@ -70,7 +70,7 @@ Git Auto Redeploy is a Go application that monitors specified Git repositories f
        After=network.target
   
        [Service]
-       ExecStart=/path/to/git-autoredeploy -configDir /path/to/configs
+       ExecStart=/path/to/git-autoredeploy -config /path/to/configs
        Restart=always
        User=yourusername
        Group=yourusergroup
