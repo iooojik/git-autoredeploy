@@ -8,7 +8,7 @@ SRC_DIR = $(shell pwd)
 BUILD_DIR = $(SRC_DIR)/build
 
 # Define the Go build command
-GO_BUILD = go build -o $(BUILD_DIR)/$(BINARY_NAME) $(SRC_DIR)/main.go
+GO_BUILD = go build -o $(BUILD_DIR)/$(BINARY_NAME) $(SRC_DIR)/cmd/autodeploy/main.go
 
 # Define the service file content
 SERVICE_CONTENT = "[Unit]\nDescription=Git Monitor Service\nAfter=network.target\n\n[Service]\nExecStart=$(BUILD_DIR)/$(BINARY_NAME)\nRestart=always\nUser=$(USER)\nGroup=$(USER)\nEnvironment=GO_ENV=production\nWorkingDirectory=$(SRC_DIR)\n\n[Install]\nWantedBy=multi-user.target\n"
