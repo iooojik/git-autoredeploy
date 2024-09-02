@@ -1,28 +1,17 @@
 # Define the binary name and service name
 BINARY_NAME = gitmonitor
 SERVICE_NAME = gitmonitor
-SERVICE_FILE = /etc/systemd/system/$(SERVICE_NAME).service
+SERVICE_FILE = ./$(SERVICE_NAME).service
 
 # Define the build directory and source directory
-BUILD_DIR = ./build
-SRC_DIR = .
+SRC_DIR = $(shell pwd)
+BUILD_DIR = $(SRC_DIR)/build
 
 # Define the Go build command
 GO_BUILD = go build -o $(BUILD_DIR)/$(BINARY_NAME) $(SRC_DIR)/main.go
 
 # Define the service file content
-SERVICE_CONTENT = "[Unit]\n\
-Description=Git Monitor Service\n\
-After=network.target\n\n\
-[Service]\n\
-ExecStart=$(BUILD_DIR)/$(BINARY_NAME)\n\
-Restart=always\n\
-User=$(USER)\n\
-Group=$(USER)\n\
-Environment=GO_ENV=production\n\
-WorkingDirectory=$(SRC_DIR)\n\n\
-[Install]\n\
-WantedBy=multi-user.target\n"
+SERVICE_CONTENT = "[Unit]\nDescription=Git Monitor Service\nAfter=network.target\n\n[Service]\nExecStart=$(BUILD_DIR)/$(BINARY_NAME)\nRestart=always\nUser=$(USER)\nGroup=$(USER)\nEnvironment=GO_ENV=production\nWorkingDirectory=$(SRC_DIR)\n\n[Install]\nWantedBy=multi-user.target\n"
 
 # Default target: build the binary and install the service
 all: build install
@@ -36,7 +25,7 @@ build:
 # Install the systemd service
 install:
 	@echo "Installing the systemd service..."
-	@echo -e $(SERVICE_CONTENT) | sudo tee $(SERVICE_FILE) > /dev/null
+	@echo $(SERVICE_CONTENT)
 	@sudo systemctl daemon-reload
 	@sudo systemctl enable $(SERVICE_NAME)
 	@sudo systemctl start $(SERVICE_NAME)
